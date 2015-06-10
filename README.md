@@ -3,4 +3,10 @@
 A DSL for building simple GUI nim application.
 Based on gtk.
 
-not yet a nimble module...
+From now, only Button,Label,DrawingArea, CBox/HBOX
+
+# TODO
+* objectify (too much globals variables)
+* add style
+* make a bunch of widget
+* not yet a nimble module...
