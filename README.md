@@ -3,7 +3,7 @@
 A DSL for building simple GUI nim application.
 Based on gtk.
 
-From now, only Button,Label,DrawingArea, CBox/HBOX
+From now, only Button, Label, DrawingArea, V/HBox
 
 ## TODO
 
