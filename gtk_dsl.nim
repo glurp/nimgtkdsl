@@ -1,3 +1,4 @@
+# LGPL ; Creative Commons BY-SA :  Regis d'Aubarede <regis.aubarede@gmail.com>
 import
   re, os, gtk2, gdk2, cairo, glib2
 
