@@ -29,21 +29,23 @@ method reset(self: Gol)  =
     for col in 0..aN-1:
       self.p2[row][col]=false
 
+template hypot(a,b : int): expr = math.sqrt(float(a*a+b*b))
 method invert(self:Gol,x,y: int) =
-  self.p2[y][x]= not self.p2[y][x]
-
-# " old ?  (nb_neighboring == 2 || nb_neighboring == 3) : ( nb_neighboring == 3 )"
+  const d=8
+  const r=7
+  for dy in -d..d:
+    for dx in -d..d:
+      if x+dx>=0 and y+dy>0:
+        if x+dx<self.w and y+dy<self.h:
+          if hypot(dx,dy)<r:
+            self.p2[y+dy][x+dx]= true
 
 method formula(self : Gol,row,col: int) : bool =
   var nb  = 0
-  nb += (if self.p1[row+1][col]: 1 else: 0)
-  nb += (if self.p1[row-1][col  ]: 1 else: 0)
-  nb += (if self.p1[row  ][col+1]: 1 else: 0)
-  nb += (if self.p1[row  ][col-1]: 1 else: 0)
-  nb += (if self.p1[row+1][col+1]: 1 else: 0)
-  nb += (if self.p1[row+1][col-1]: 1 else: 0)
-  nb += (if self.p1[row-1][col+1]: 1 else: 0)
-  nb += (if self.p1[row-1][col-1]: 1 else: 0)
+  for dr in -1..1:
+    for dc in -1..1:
+      if dr!=0 or dc!=0:  nb += (if self.p1[row+dr][col+dc]: 1 else: 0)
+      
   result= if self.p1[row][col]:
             nb==2 or nb==3
           else:
@@ -71,14 +73,6 @@ method random(self:Gol) : void =
 
 template get(self: Gol,x,y : int) : expr =
   self.p2[y][x]
-
-proc `$`(self: Gol) : string =
-  result="*******************************************************************"
-  for row in 0..aM-1:
-    result = result & "\n"
-    for col in 0..aN-1:
-      result = result & $(if self.p2[row][col]: '+' else: '.')
-
 
 
 
@@ -115,7 +109,7 @@ proc redraw(widget : PWidget) =
       handle_button_press proc (widget: PWidget, event: TEventButton): gboolean {.cdecl.} =
         gol.invert(int(event.x) %% aN ,int(event.y) %% aM)
         refresh_cairo()
-      handle_timer 50,    proc(w:PWidget) {.cdecl.} =
+      handle_timer 100,    proc(w:PWidget) {.cdecl.} =
         if start:
           gol.on_tick
           refresh_cairo()
