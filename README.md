@@ -8,5 +8,6 @@ From now, only Button,Label,DrawingArea, CBox/HBOX
 # TODO
 * objectify (too much globals variables)
 * add style
-* make a bunch of widget
+* support a bunch of widget
+* tests unit
 * not yet a nimble module...
