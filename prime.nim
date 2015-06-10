@@ -1,12 +1,15 @@
+########################################################################
+#   Prime piral generator, in GTK/ Dsl
+# see http://mathforum.org/mathimages/index.php/Prime_spiral_%28Ulam_spiral%29
+########################################################################
 
-import
-  math
-
+import math
 include gtk_dsl
+
 const
-  aM = 800
-  aN = 800
-  mx= aM*aN
+  MaxY = 800
+  MaxX = 800
+  mx= MaxY*MaxX
   nP = 1000+int(mx*0.3) # mx/ln(mx) ?
   
 proc calculatePrime() : array[nP,int] =
@@ -42,7 +45,7 @@ var start = false
 var gcv : PWidget
 var cpt=0
 
-proc refresh_cairo() =  gcv.queue_draw_area(gint(0),gint(0),gint(aN),gint(aM))
+proc refresh_cairo() =  gcv.queue_draw_area(gint(0),gint(0),gint(MaxX),gint(MaxY))
 
 template move(cr:PContext ,n,pos,x,y,dx,dy,len : int): stmt =
   if len>0 and pos<nP:
@@ -63,17 +66,17 @@ proc redraw(widget : PWidget) =
   echo "redraw"
   var cr : PContext = widget.window.cairo_create()
   cr.set_source_rgba(0.0, 0.3, 0.1 , 1.0)
-  cr.rectangle(0,0,aN,aM)
+  cr.rectangle(0,0,MaxX,MaxY)
   cr.fill
   cr.set_source_rgba(1.0, 0.3, 0.1 , 1.0)
   var 
     n=1
     pos=0
-    x=int(aN/2)
-    y=int(aM/2)
+    x=int(MaxX/2)
+    y=int(MaxY/2)
     d=1
     len=d
-  while x<aN and y< aM:
+  while x<MaxX and y< MaxY:
       move(cr,n,pos,x,y, 0,-d,len-1)
       move(cr,n,pos,x,y,-d, 0,len)
       move(cr,n,pos,x,y, 0, d,len)
@@ -83,10 +86,10 @@ proc redraw(widget : PWidget) =
   cr.destroy()
   echo "end redraw"
 
-"Primes".gtk_app(aN,aM+30):
+"Primes".gtk_app(MaxX,MaxY+30):
   stack:
-    canvas(aN,aM):
-      handle_expose       proc (widget: PWidget, event: PEventExpose): gboolean {.cdecl.} =
+    canvas(MaxX,MaxY):
+      handle_expose proc (widget: PWidget, event: PEventExpose): gboolean {.cdecl.} =
         redraw(widget)
         result=false
     gcv=glastWidget
