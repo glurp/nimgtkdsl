@@ -1,5 +1,5 @@
 ########################################################################
-#   Prime piral generator, in GTK/ Dsl
+#   Prime Spiral generator, in GTK/ Dsl
 # see http://mathforum.org/mathimages/index.php/Prime_spiral_%28Ulam_spiral%29
 ########################################################################
 
@@ -11,8 +11,8 @@ const
   MaxX = 800
   mx= MaxY*MaxX
   nP = 1000+int(mx*0.3) # mx/ln(mx) ?
-  
-proc calculatePrime() : array[nP,int] =
+
+proc calculatePrimes() : array[nP,int] =
   echo("start prims calculate...")
   result[0]=2
   var pos=1
@@ -21,7 +21,7 @@ proc calculatePrime() : array[nP,int] =
   var max=0
   while pos < nP:
     ok=true
-    max=int(math.sqrt(float(n)))
+    max=int(math.sqrt(float(n)))+1
     for i in 0..(pos-1):
       if result[i]>max: break
       if (n %% result[i])==0: ( ok=false ; break )
@@ -33,6 +33,26 @@ proc calculatePrime() : array[nP,int] =
     n+=1
   echo("end prims calculate, size=" & $pos & " last=>" & $result[pos-1])
 
+proc calculatenoMultipleOfn(nb: int) : array[nP,int] =
+  echo("start prims calculate...")
+  result[0]=2
+  var pos=1
+  var n=3
+  var ok: bool
+  var max=0
+  while pos < nP:
+    ok=true
+    max=int(math.sqrt(float(n)))+1
+    for i in 0..min(pos-1,nb):
+      if result[i]>max: break
+      if (n %% result[i])==0: ( ok=false ; break )
+    if ok:
+      if (pos %% 100000)==0:
+        echo("[",pos,"] => ",n, "  /",nP)
+      result[pos]=n
+      pos+=1
+    n+=1
+  echo("end prims calculate, size=" & $pos & " last=>" & $result[pos-1])
 
 
 ################################################################
@@ -40,7 +60,7 @@ proc calculatePrime() : array[nP,int] =
 ################################################################
 
 
-let primes = calculatePrime()
+var primes = calculatePrimes()
 var start = false
 var gcv : PWidget
 var cpt=0
@@ -69,7 +89,7 @@ proc redraw(widget : PWidget) =
   cr.rectangle(0,0,MaxX,MaxY)
   cr.fill
   cr.set_source_rgba(1.0, 0.3, 0.1 , 1.0)
-  var 
+  var
     n=1
     pos=0
     x=int(MaxX/2)
@@ -94,6 +114,14 @@ proc redraw(widget : PWidget) =
         result=false
     gcv=glastWidget
     flowi:
-      frame("ee"):
-        button  "gtk-clear",proc () {.gcsafe, locks: 0.} =
+      frame("Choice"):
+        button  "Primes",proc ()  =
+          primes = calculatePrimes()
           refresh_cairo()
+        button  "Mult 2",proc ()  = ( primes = calculatenoMultipleOfn(2) ; refresh_cairo() )
+        button  "Mult 3",proc ()  = ( primes = calculatenoMultipleOfn(3) ; refresh_cairo() )
+        button  "Mult 4",proc ()  = ( primes = calculatenoMultipleOfn(4) ; refresh_cairo() )
+        button  "Mult 5",proc ()  = ( primes = calculatenoMultipleOfn(5) ; refresh_cairo() )
+        button  "Mult 6",proc ()  = ( primes = calculatenoMultipleOfn(6) ; refresh_cairo() )
+        button  "Mult 7",proc ()  = ( primes = calculatenoMultipleOfn(7) ; refresh_cairo() )
+        button  "Mult 8",proc ()  = ( primes = calculatenoMultipleOfn(8) ; refresh_cairo() )
