@@ -31,13 +31,13 @@ method reset(self: Gol)  =
 
 template hypot(a,b : int): expr = math.sqrt(float(a*a+b*b))
 method invert(self:Gol,x,y: int) =
-  const d=8
-  const r=7
+  const d=12
+  const r=12
   for dy in -d..d:
     for dx in -d..d:
       if x+dx>=0 and y+dy>0:
         if x+dx<self.w and y+dy<self.h:
-          if hypot(dx,dy)<r:
+          if hypot(dx,dy)<r and random(100)<70:
             self.p2[y+dy][x+dx]= true
 
 method formula(self : Gol,row,col: int) : bool =
@@ -45,7 +45,7 @@ method formula(self : Gol,row,col: int) : bool =
   for dr in -1..1:
     for dc in -1..1:
       if dr!=0 or dc!=0:  nb += (if self.p1[row+dr][col+dc]: 1 else: 0)
-      
+
   result= if self.p1[row][col]:
             nb==2 or nb==3
           else:
@@ -109,11 +109,13 @@ proc redraw(widget : PWidget) =
       handle_button_press proc (widget: PWidget, event: TEventButton): gboolean {.cdecl.} =
         gol.invert(int(event.x) %% aN ,int(event.y) %% aM)
         refresh_cairo()
-      handle_timer 100,    proc(w:PWidget) {.cdecl.} =
-        if start:
-          gol.on_tick
-          refresh_cairo()
     gcv=glastWidget
+    when_idle   gcv,proc(a: gpointer) : gboolean  =
+        if start:
+          echo "e"
+          gol.on_tick()
+          refresh_cairo()
+        result=true
     flowi:
       frame("ee"):
         button  "gtk-clear",proc () {.gcsafe, locks: 0.} =

@@ -7,8 +7,8 @@ import math
 include gtk_dsl
 
 const
-  MaxY = 800
-  MaxX = 800
+  MaxY = 700
+  MaxX = 900
   mx= MaxY*MaxX
   nP = 1000+int(mx*0.3) # mx/ln(mx) ?
 
@@ -85,7 +85,7 @@ template move(cr:PContext ,n,pos,x,y,dx,dy,len : int): stmt =
 proc redraw(widget : PWidget) =
   echo "redraw"
   var cr : PContext = widget.window.cairo_create()
-  cr.set_source_rgba(0.0, 0.3, 0.1 , 1.0)
+  cr.set_source_rgba(0.0, 0.1, 0.1 , 1.0)
   cr.rectangle(0,0,MaxX,MaxY)
   cr.fill
   cr.set_source_rgba(1.0, 0.3, 0.1 , 1.0)
@@ -125,3 +125,12 @@ proc redraw(widget : PWidget) =
         button  "Mult 6",proc ()  = ( primes = calculatenoMultipleOfn(6) ; refresh_cairo() )
         button  "Mult 7",proc ()  = ( primes = calculatenoMultipleOfn(7) ; refresh_cairo() )
         button  "Mult 8",proc ()  = ( primes = calculatenoMultipleOfn(8) ; refresh_cairo() )
+    flowi:
+        button  "Mult 9",proc ()  = ( primes = calculatenoMultipleOfn(9) ; refresh_cairo() )
+        button  "Mult 10",proc ()  = ( primes = calculatenoMultipleOfn(10) ; refresh_cairo() )
+        button  "Mult 11",proc ()  = ( primes = calculatenoMultipleOfn(11) ; refresh_cairo() )
+        button  "Mult 15",proc ()  = ( primes = calculatenoMultipleOfn(15) ; refresh_cairo() )
+        button  "Mult 17",proc ()  = ( primes = calculatenoMultipleOfn(17) ; refresh_cairo() )
+        button  "Mult 20",proc ()  = ( primes = calculatenoMultipleOfn(20) ; refresh_cairo() )
+        button  "Mult 25",proc ()  = ( primes = calculatenoMultipleOfn(25) ; refresh_cairo() )
+    

@@ -27,6 +27,13 @@ proc appendi(w: PWidget): void =
 proc option() =
   echo("coucou")
 
+template anim(ms: int,pproc: proc) : stmt {.immediate.} =
+  discard g_timeout_add(ms, pproc,0)
+
+template when_idle(param: gint, pproc: proc) : stmt {.immediate.} =
+  discard g_idle_add(pproc, param)
+
+
 ############
 template gtk_app(title: string,width,height: int,code: stmt): stmt {.immediate.} =
   nim_init()
