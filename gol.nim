@@ -112,7 +112,6 @@ proc redraw(widget : PWidget) =
     gcv=glastWidget
     when_idle   gcv,proc(a: gpointer) : gboolean  =
         if start:
-          echo "e"
           gol.on_tick()
           refresh_cairo()
         result=true
